@@ -4,7 +4,12 @@ $(document).ready(function(){
 
  $('#hacienda').click(function(){
 
+  var sessionKey;
+  var userName;
+
   login_api();
+  Upload_certif();
+   
   
   //save_form();
 
@@ -38,10 +43,10 @@ function login_api() {
                         // console.log(key + ' ' + value); // "a 5", "b 7", "c 9"     
                           sessionKey = value.sessionKey;
                           userName = value.userName;
-                         
-                          console.log(sessionKey);
-                          console.log(userName);
-                           });
+                         Upload_certif(sessionKey,userName);
+                          //console.log(sessionKey);
+                          //console.log(userName);
+                      });
                   }
      })
     }
@@ -50,22 +55,71 @@ function login_api() {
      alert(" Debe llenar los campos");
     }
 
-  var xhr = new XMLHttpRequest(); 
-  xhr.open("POST", "/file.p12"); 
+    
+}
 
-  xhr.addEventListener("load", function (e) {
-        // file upload is complete
-        console.log(xhr.responseText);
-    });
-  
-  xhr.responseType = "blob";
+ function Upload_certif(){
 
-  var formData = new FormData();
-
-  formData.append("", xhr);
-
-
+  var file = $('#csv')[0].files[0];
+  var fileReader = new FileReader();
+  fileReader.onloadend = function (e) {
+    var arrayBuffer = e.target.result;
+    var fileType = ".p12";
+    blobUtil.arrayBufferToBlob(arrayBuffer, fileType).then(function (blob) {
+      console.log('here is a blob', blob);
+      console.log('its size is', blob.size);
+      console.log('its type is', blob.type);
+    }).catch(console.log.bind(console));
+  };
+  fileReader.readAsArrayBuffer(file);
    
+   
+
+
+    /*var parametros_upload_certif = {
+                  "w" : "fileUploader",
+                  "r" : "subir_certif",
+                  "sessionKey": sessionKey,
+                  "fileToUpload" :blob,                  
+                  "iam" : userName
+                  
+          };
+
+    if(parametros_upload_certif != '')
+    {
+
+    //alert(typeSituation);
+     $.ajax({
+      url:"http://mh.bovinapp.net/www/api.php",
+      method:"POST",
+      data:parametros_upload_certif,
+      dataType:"JSON",
+      beforeSend: function () {
+                          $("#resultado").html("Procesando, espere por favor...");
+                  },
+                  success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
+                         console.log(response);
+                        Object.entries(response).forEach(([key, value]) => {
+                        // console.log(key + ' ' + value); // "a 5", "b 7", "c 9"     
+                          idFile = value.idFile;
+                          name = value.name;
+                          downloadCode = value.downloadCode;
+                         
+                          console.log(downloadCode);
+                          console.log(name);
+                           });
+                  }
+     })
+    }
+    else
+    {
+     alert(" Debe llenar los campos");
+    }*/
+
+
+  
+
+
 }
 
 

@@ -470,6 +470,8 @@
                                 <input type="text" readonly="readonly" name="txtchange_" id="cha_" class="form-control tax-sales-d" value="0" /><br />
                       </div>
 
+                      <input id="csv" name="csv" type="file" />
+
                       <label id="resultado"></label>
 
                         
